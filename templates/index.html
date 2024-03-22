@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+
+    <div style="color:rgb(163, 163, 169)">
+        <div class="hero-image">
+            <h1 style="font-size:50px">Predictive Analysis</h1>
+            <form action="{{ url_for('predict')}}" method="post">
+                <input id="year" name="Year" type="number" placeholder="Year">
+                <select id="company" name="Company" onchange="populateModels()" required>
+                    <option value="" disabled selected>Select Company</option>
+                    <option value="Maruti Suzuki">Maruti Suzuki</option>
+                    <option value="Hyundai">Hyundai</option>
+                    <option value="Tata Motors">Tata Motors</option>
+                    <option value="Mahindra & Mahindra">Mahindra & Mahindra</option>
+                    <option value="Honda Cars">Honda Cars</option>
+                    <option value="Toyota Kirloskar Motor">Toyota Kirloskar Motor</option>
+                    <option value="Ford India">Ford India</option>
+                    <option value="Volkswagen India">Volkswagen India</option>
+                    <option value="Skoda Auto India">Skoda Auto India</option>
+                    <option value="Kia Motors India">Kia Motors India</option>
+                    <!-- Add more companies as needed -->
+                </select>
+                <select id="model" name="Model" required>
+                    <option value="" disabled selected>Select Model</option>
+                </select>
+                <input id="present_price" name="Present_Price" required placeholder="Present Price">
+                <input id="kms_driven" name="Kms_Driven" required placeholder="Kms Driven">
+                <input id="owner" name="Owner" required placeholder="Owner">
+                <h3>Fuel type</h3>
+                <select name="Fuel_Type_Petrol" required>
+                    <option value="Petrol">Petrol</option>
+                    <option value="Diesel">Diesel</option>
+                    <option value="Hybrid">Hybrid</option>
+                </select>
+                <h3>Dealer or Private</h3>
+                <select name="Seller_Type_Individual" required>
+                    <option value="Dealer">Dealer</option>
+                    <option value="Individual">Private</option>
+                </select>
+                <h3>Transmission type</h3>
+                <select name="Transmission_Mannual" required>
+                    <option value="Manual">Manual Car</option>
+                    <option value="Automatic">Automatic Car</option>
+                </select>
+                <button type="submit">Predict Selling Price</button>
+            </form>
+            <br><br>
+            <h3>{{ prediction_text }}</h3>
+        </div>
+    </div>
+
+    <script>
+        function populateModels() {
+            var company = document.getElementById("company").value;
+            var modelSelect = document.getElementById("model");
+            modelSelect.innerHTML = ""; // Clear previous options
+
+            // Add models based on the selected company
+            switch (company) {
+                case "Maruti Suzuki":
+                    addOption(modelSelect, "Alto");
+                    addOption(modelSelect, "Swift");
+                    addOption(modelSelect, "Dzire");
+                    addOption(modelSelect, "Wagon R");
+                    addOption(modelSelect, "Baleno");
+                    addOption(modelSelect, "Vitara Brezza");
+                    addOption(modelSelect, "Ertiga");
+                    addOption(modelSelect, "Celerio");
+                    addOption(modelSelect, "S-Presso");
+                    addOption(modelSelect, "Ignis");
+                    break;
+                case "Hyundai":
+                    addOption(modelSelect, "Grand i10");
+                    addOption(modelSelect, "i20");
+                    addOption(modelSelect, "Venue");
+                    addOption(modelSelect, "Creta");
+                    addOption(modelSelect, "Verna");
+                    addOption(modelSelect, "Aura");
+                    addOption(modelSelect, "Santro");
+                    addOption(modelSelect, "Tucson");
+                    addOption(modelSelect, "Elantra");
+                    break;
+                case "Tata Motors":
+                    addOption(modelSelect, "Tiago");
+                    addOption(modelSelect, "Altroz");
+                    addOption(modelSelect, "Nexon");
+                    addOption(modelSelect, "Harrier");
+                    addOption(modelSelect, "Safari");
+                    addOption(modelSelect, "Tigor");
+                    addOption(modelSelect, "Nexon EV");
+                    addOption(modelSelect, "Tigor EV");
+                    break;
+                case "Mahindra & Mahindra":
+                    addOption(modelSelect, "Scorpio");
+                    addOption(modelSelect, "XUV300");
+                    addOption(modelSelect, "Bolero");
+                    addOption(modelSelect, "Thar");
+                    addOption(modelSelect, "XUV500");
+                    addOption(modelSelect, "Marazzo");
+                    addOption(modelSelect, "KUV100 NXT");
+                    break;
+                case "Honda Cars":
+                    addOption(modelSelect, "Amaze");
+                    addOption(modelSelect, "City");
+                    addOption(modelSelect, "WR-V");
+                    addOption(modelSelect, "Jazz");
+                    addOption(modelSelect, "Civic");
+                    addOption(modelSelect, "CR-V");
+                    break;
+                case "Toyota Kirloskar Motor":
+                    addOption(modelSelect, "Innova Crysta");
+                    addOption(modelSelect, "Fortuner");
+                    addOption(modelSelect, "Glanza");
+                    addOption(modelSelect, "Urban Cruiser");
+                    addOption(modelSelect, "Yaris");
+                    break;
+                case "Ford India":
+                    addOption(modelSelect, "EcoSport");
+                    addOption(modelSelect, "Figo");
+                    addOption(modelSelect, "Endeavour");
+                    addOption(modelSelect, "Aspire");
+                    break;
+                case "Volkswagen India":
+                    addOption(modelSelect, "Polo");
+                    addOption(modelSelect, "Vento");
+                    addOption(modelSelect, "T-Roc");
+                    addOption(modelSelect, "Taigun");
+                    break;
+                case "Skoda Auto India":
+                    addOption(modelSelect, "Rapid");
+                    addOption(modelSelect, "Octavia");
+                    addOption(modelSelect, "Superb");
+                    addOption(modelSelect, "Kushaq");
+                    break;
+                case "Kia Motors India":
+                    addOption(modelSelect, "Seltos");
+                    addOption(modelSelect, "Sonet");
+                    addOption(modelSelect, "Carnival");
+                    break;
+                // Add cases for more companies and their models as needed
+            }
+        }
+
+        function addOption(selectElement, optionText) {
+            var option = document.createElement("option");
+            option.text = optionText;
+            option.value = optionText;
+            selectElement.add(option);
+        }
+    </script>
+
